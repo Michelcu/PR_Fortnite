@@ -1,6 +1,5 @@
 [phases.setup]
-nixPkgs = ["nodejs_20"]
-aptPkgs = ["chromium-browser", "fonts-liberation", "libnss3", "libatk-bridge2.0-0", "libdrm2", "libxkbcommon0", "libgbm1", "libxshmfence1", "libxrandr2"]
+nixPkgs = ["nodejs_20", "chromium"]
 
 [phases.install]
 cmds = ["cd backend && npm ci --production=false"]
@@ -13,4 +12,4 @@ cmd = "cd backend && node server.js"
 
 [variables]
 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
-PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium-browser"
+PUPPETEER_EXECUTABLE_PATH = "/nix/store/$(ls /nix/store | grep chromium | head -1)/bin/chromium"
