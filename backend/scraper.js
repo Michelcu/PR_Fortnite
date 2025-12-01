@@ -11,10 +11,15 @@ async function scrapePlayerEvents(playerName) {
     try {
         console.log(`🌐 Iniciando navegador para ${playerName}...`);
         
+        // Buscar ejecutable de Chromium
+        const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || 
+            require('child_process').execSync('which chromium').toString().trim() ||
+            undefined;
+        
         // Configuración de Puppeteer
         browser = await puppeteer.launch({
             headless: 'new',
-            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+            executablePath: executablePath,
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
