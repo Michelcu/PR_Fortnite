@@ -12,9 +12,18 @@ async function scrapePlayerEvents(playerName) {
         console.log(`🌐 Iniciando navegador para ${playerName}...`);
         
         // Buscar ejecutable de Chromium
-        const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || 
-            require('child_process').execSync('which chromium').toString().trim() ||
-            undefined;
+        let executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+        
+        if (!executablePath) {
+            try {
+                executablePath = require('child_process').execSync('which chromium 2>/dev/null || which chromium-browser 2>/dev/null').toString().trim();
+            } catch (e) {
+                // Si no encuentra chromium, deja que Puppeteer use el bundled
+                executablePath = undefined;
+            }
+        }
+        
+        console.log(`🔍 Usando Chromium en: ${executablePath || 'bundled chromium'}`);
         
         // Configuración de Puppeteer
         browser = await puppeteer.launch({

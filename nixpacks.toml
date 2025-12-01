@@ -5,10 +5,7 @@ nixPkgs = ["nodejs_20", "chromium"]
 cmds = ["cd backend && npm ci --production=false"]
 
 [phases.build]
-cmds = ["echo 'Build complete'"]
+cmds = ["echo 'Chromium path:' && which chromium || echo 'Chromium not found in PATH'"]
 
 [start]
 cmd = "cd backend && node server.js"
-
-[variables]
-PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
