@@ -1,23 +1,26 @@
 const express = require('express');
 const cors = require('cors');
 const { scrapePlayerEvents } = require('./scraper');
-// const { initDatabase, getPlayerCache, savePlayerCache } = require('./database');
+const { initDatabase, getPlayerCache, savePlayerCache } = require('./database');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Cache en memoria temporal (sin BD)
+// Cache en memoria como fallback
 const memoryCache = new Map();
 const CACHE_DURATION = 60 * 60 * 1000; // 1 hora
-
-console.log('⚠️  Ejecutando en modo sin base de datos (cache en memoria)');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 // Inicializar base de datos al arrancar
-// initDatabase().catch(err => console.error('❌ Error inicializando BD:', err));
+if (process.env.DATABASE_URL) {
+    console.log('📊 Conectando a PostgreSQL...');
+    initDatabase().catch(err => console.error('❌ Error inicializando BD:', err));
+} else {
+    console.log('⚠️  Ejecutando en modo sin base de datos (cache en memoria)');
+}
 
 // Health check para Railway
 app.get('/health', (req, res) => {
@@ -34,13 +37,22 @@ app.get('/api/player/:playerName', async (req, res) => {
         const playerName = decodeURIComponent(req.params.playerName);
         console.log(`🔍 Buscando jugador: ${playerName}`);
 
-        // Verificar cache en memoria
-        const cacheKey = playerName.toLowerCase();
-        const cached = memoryCache.get(cacheKey);
-        
-        if (cached && (Date.now() - cached.timestamp < CACHE_DURATION)) {
-            console.log('✅ Datos en cache (memoria)');
-            return res.json(cached.data);
+        // Intentar usar cache de PostgreSQL primero
+        if (process.env.DATABASE_URL) {
+            const cached = await getPlayerCache(playerName);
+            if (cached) {
+                console.log('✅ Datos en cache (PostgreSQL)');
+                return res.json(cached);
+            }
+        } else {
+            // Fallback a cache en memoria
+            const cacheKey = playerName.toLowerCase();
+            const cached = memoryCache.get(cacheKey);
+            
+            if (cached && (Date.now() - cached.timestamp < CACHE_DURATION)) {
+                console.log('✅ Datos en cache (memoria)');
+                return res.json(cached.data);
+            }
         }
 
         // Hacer scraping
@@ -53,11 +65,16 @@ app.get('/api/player/:playerName', async (req, res) => {
             });
         }
 
-        // Guardar en cache de memoria
-        memoryCache.set(cacheKey, {
-            data: data,
-            timestamp: Date.now()
-        });
+        // Guardar en cache
+        if (process.env.DATABASE_URL) {
+            await savePlayerCache(playerName, data);
+        } else {
+            const cacheKey = playerName.toLowerCase();
+            memoryCache.set(cacheKey, {
+                data: data,
+                timestamp: Date.now()
+            });
+        }
 
         res.json(data);
 

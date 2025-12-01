@@ -9,6 +9,9 @@ yarn-error.log*
 .env.local
 .env.production
 
+# Railway token (DO NOT COMMIT)
+../.railway-token
+
 # Logs
 logs/
 *.log
