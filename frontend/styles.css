@@ -1,0 +1,254 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+#playerName {
+    flex: 1;
+    padding: 12px 20px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+#playerName:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+#searchBtn {
+    padding: 12px 30px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#searchBtn:hover {
+    background: #5568d3;
+}
+
+#searchBtn:active {
+    transform: scale(0.98);
+}
+
+.loading {
+    text-align: center;
+    color: #667eea;
+    font-size: 18px;
+    margin: 20px 0;
+    display: none;
+}
+
+.loading.show {
+    display: block;
+}
+
+.results {
+    margin-top: 20px;
+}
+
+.result-item {
+    background: #f8f9fa;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.result-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.account-name {
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.account-id {
+    color: #666;
+    font-size: 14px;
+    font-family: monospace;
+}
+
+.error {
+    background: #fee;
+    color: #c33;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #c33;
+}
+
+.no-results {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+}
+
+/* Estilos para torneos */
+.tournaments {
+    margin-top: 30px;
+}
+
+.tournaments h2 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #667eea;
+}
+
+.tournaments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tournament-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-left: 4px solid #28a745;
+}
+
+.tournament-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tournament-rank {
+    font-size: 24px;
+    font-weight: bold;
+    color: #667eea;
+    min-width: 60px;
+    text-align: center;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.tournament-details {
+    flex: 1;
+}
+
+.tournament-name {
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.tournament-info {
+    display: flex;
+    gap: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.tournament-info span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Estilos para tabla de torneos */
+.tournaments-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tournaments-table thead {
+    background: #667eea;
+    color: white;
+}
+
+.tournaments-table th {
+    padding: 10px 8px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 13px;
+    border-bottom: 2px solid #5568d3;
+}
+
+.tournaments-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.tournaments-table td.event-name {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tournaments-table td.center {
+    text-align: center;
+}
+
+.tournaments-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.tournaments-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .tournaments-table {
+        font-size: 12px;
+    }
+    
+    .tournaments-table th,
+    .tournaments-table td {
+        padding: 8px 4px;
+    }
+}
