@@ -1,7 +1,7 @@
 // Backend API URL - cambiar según entorno
 const BACKEND_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:3000' 
-    : 'https://tu-app.railway.app'; // Cambiar después del deploy en Railway
+    : 'https://prfortnite-production.up.railway.app';
 
 const playerNameInput = document.getElementById('playerName');
 const searchBtn = document.getElementById('searchBtn');
